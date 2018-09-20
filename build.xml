@@ -72,18 +72,6 @@
               passthru="true"/>
     </target>
 
-    <!-- ============================================  -->
-    <!-- Target: fixture-loading                       -->
-    <!-- ============================================  -->
-
-
-    <!-- <target name="fixture-loading">
-        <echo msg="Fixture loading" />
-        <exec command="${symfony.bin} hautelook_alice:doctrine:fixtures:load --append --env=test --no-interaction -b IadDbBundle -b IadDirectoryDbBundle -b IadRealEstateBundle -b MyIadBundle -b IadAppBundle -b IadCapacitationBundle -b IadGenealogyBundle -b IadTransactionBundle -b AbsenceManagementBundle -b IadGatewayBundle"
-              checkreturn="true"
-              passthru="true"/>
-    </target> -->
-
 
 
     <!-- ============================================  -->
