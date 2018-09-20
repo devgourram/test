@@ -30,7 +30,7 @@
         "phing/phing": "~2.0",
         "phpunit/phpunit": "~5.7",
         "symfony/phpunit-bridge": "~4.0",
-        "squizlabs/php_codesniffer": "~2.5",
+        "squizlabs/php_codesniffer": "~3.*",
         "endouble/symfony3-custom-coding-standard": "~2.1",
         "phploc/phploc": "~4.0",
         "sebastian/phpcpd": "^2.0",
