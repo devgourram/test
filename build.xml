@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="IadEspanaApp" default="build">
+
+    <!-- Properties -->
+    <property name="phpcs.bin" value="${project.basedir}/bin/phpcs" />
+    <property name="phpcs.standard" value="vendor/Symfony3-custom-coding-standard/Symfony3Custom" />
+    <property name="phpcs.dir" value="${project.basedir}" />
+    <property name="phpunit.bin" value="${project.basedir}/bin/phpunit" />
+    <property name="symfony.bin" value="${project.basedir}/bin/console" />
+    <property name="phploc.bin" value="${project.basedir}/bin/phploc" />
+    <property name="phpcpd.bin" value="${project.basedir}/bin/phpcpd" />
+    <property name="phpdoc.bin" value="${project.basedir}/bin/phpdoc" />
+
+    <!-- ============================================  -->
+    <!-- Target: sf-cache-clear                        -->
+    <!-- ============================================  -->
+    <target name="sf-cache-clear">
+        <exec command="${symfony.bin} cache:clear --env=test"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: prepare                               -->
+    <!-- ============================================  -->
+    <target name="prepare">
+        <echo msg="Making directory ./build" />
+        <delete dir="./docs" quiet="true"/>
+        <delete file="checkstyle-result.xml" quiet="true"/>
+        <delete file="cpd.xml" quiet="true"/>
+        <delete file="pmd.xml" quiet="true"/>
+        <delete dir="./reports" quiet="true"/>
+        <copy file="app/config/parameters.yml.build" tofile="app/config/parameters.yml" overwrite="true"/>
+
+        <exec command="composer -v update --no-interaction"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: doctrine-clean                        -->
+    <!-- ============================================  -->
+    <target name="doctrine-clean">
+        <echo msg="Database clean" />
+        <exec command="${symfony.bin} doctrine:database:drop --env=test --force"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: doctrine-reset                        -->
+    <!-- ============================================  -->
+    <target name="doctrine-reset" depends="doctrine-clean">
+        <echo msg="Database reset" />
+        <exec command="${symfony.bin} doctrine:database:drop --env=test --force"
+              passthru="true"/>
+        <exec command="${symfony.bin} doctrine:database:create --env=test"
+              checkreturn="true"
+              passthru="true"/>
+        <exec command="${symfony.bin} doctrine:schema:update --env=test --force"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: doctrine-validation                   -->
+    <!-- ============================================  -->
+    <target name="doctrine-validation">
+        <echo msg="Doctrine schema validation" />
+        <exec command="${symfony.bin} doctrine:schema:validate --env=test"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: fixture-loading                       -->
+    <!-- ============================================  -->
+
+
+    <!-- <target name="fixture-loading">
+        <echo msg="Fixture loading" />
+        <exec command="${symfony.bin} hautelook_alice:doctrine:fixtures:load --append --env=test --no-interaction -b IadDbBundle -b IadDirectoryDbBundle -b IadRealEstateBundle -b MyIadBundle -b IadAppBundle -b IadCapacitationBundle -b IadGenealogyBundle -b IadTransactionBundle -b AbsenceManagementBundle -b IadGatewayBundle"
+              checkreturn="true"
+              passthru="true"/>
+    </target> -->
+
+
+
+    <!-- ============================================  -->
+    <!-- Target: checkstyle                            -->
+    <!-- ============================================  -->
+    <target name="checkstyle">
+        <echo msg="phpcs" />
+        <exec command="${phpcs.bin}
+                       -n
+                       --colors
+                       --error-severity=1
+                       --standard=${phpcs.standard}
+                       --ignore=Tests,vendor,${phpcs.dir}/app,bin
+                       ${phpcs.dir}"
+              checkreturn="true"
+              passthru="true"
+        />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: lint-yaml                             -->
+    <!-- ============================================  -->
+    <target name="lint-yaml">
+        <echo msg="lint-yaml" />
+        <exec command="${symfony.bin} lint:yaml app/config"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phploc                                -->
+    <!-- ============================================  -->
+    <target name="phploc">
+        <echo msg="${phploc.bin} --count-tests ${project.basedir}" />
+        <exec command="${phploc.bin} --count-tests ${project.basedir}"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: phpcpd                                -->
+    <!-- ============================================  -->
+    <target name="phpcpd">
+        <echo msg="${phpcpd.bin}
+                   --exclude=vendor
+                   --exclude=app
+                   --log-pmd=cpd.xml ${project.basedir}" />
+        <exec command="${phpcpd.bin}
+                       --exclude=vendor
+                       --exclude=app
+                       --log-pmd=cpd.xml ${project.basedir}"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: phpdoc                                -->
+    <!-- ============================================  -->
+    <target name="phpdoc">
+        <echo msg="${phpdoc.bin}
+                    --ignore=&quot;*/vendor/*,*/app/*&quot;
+                    -d .
+                    -t ./docs/
+                    --template=&quot;responsive-twig&quot;" />
+        <exec command="${phpdoc.bin}
+                      --ignore=&quot;*/vendor/*,*/app/*&quot;
+                      -d .
+                      -t ./docs/
+                      --template=&quot;responsive-twig&quot;"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: security-check                        -->
+    <!-- ============================================  -->
+    <target name="security-check">
+        <echo msg="Security check -- IGNORED" />
+        <!--<exec command="${symfony.bin}-->
+                     <!--security:check-->
+                     <!--&#45;&#45;env=test"-->
+              <!--checkreturn="true"-->
+              <!--passthru="true"/>-->
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: validations                           -->
+    <!-- ============================================  -->
+    <target name="validations" depends="checkstyle, lint-yaml, security-check, phploc, phpdoc">
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: test                                  -->
+    <!-- ============================================  -->
+    <target name="test" depends="prepare, doctrine-reset, doctrine-validation, fixture-loading">
+        <phingcall target="sf-cache-clear" />
+        <echo msg="${phpunit.bin}" />
+        <phingcall target="test-by-group">
+            <param name="group" value="unitTest" />
+        </phingcall>
+        <phingcall target="test-by-group">
+            <param name="group" value="functionalTest" />
+        </phingcall>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: test-dev                              -->
+    <!-- Desc: used for local testing                  -->
+    <!-- ============================================  -->
+    <target name="test-dev" depends="doctrine-reset, fixture-loading">
+        <delete quiet="true">
+            <fileset dir="var/logs/">
+                <include name="test.*" />
+            </fileset>
+        </delete>
+        <phingcall target="sf-cache-clear" />
+        <phingcall target="test-by-group">
+            <param name="group" value="unitTest" />
+            <param name="options" value="--stop-on-failure" />
+        </phingcall>
+        <phingcall target="test-by-group">
+            <param name="group" value="functionalTest" />
+            <param name="options" value="--stop-on-failure" />
+        </phingcall>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT) Target: build                       -->
+    <!-- ============================================  -->
+    <target name="build" depends="test, validations">
+    </target>
+
+    <!-- ============================================ -->
+    <!-- Target : test-by-group (Hidden)              -->
+    <!-- Desc :  execute test by group                -->
+    <!-- ============================================ -->
+    <target hidden="true" name="test-by-group">
+        <echo msg="Test ${group}" />
+        <exec command="${phpunit.bin}
+                       -c app/
+                       --group ${group}
+                       ${options}"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+</project>
