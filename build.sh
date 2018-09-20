@@ -16,7 +16,7 @@ if [ "$?" != "0" ]; then
 fi
 php bin/console cache:clear --env=test
 echo "Creation de la base de données"
-php app/console doctrine:database:drop --force --env=test
+php bin/console doctrine:database:drop --force --env=test
 php bin/console doctrine:database:create --env=test
 if [ "$?" != "0" ]; then
     exit 1;
