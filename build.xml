@@ -167,7 +167,7 @@
     <!-- ============================================  -->
     <!-- Target: test                                  -->
     <!-- ============================================  -->
-    <target name="test" depends="prepare, doctrine-reset, doctrine-validation, fixture-loading">
+    <target name="test" depends="prepare, doctrine-reset, doctrine-validation">
         <phingcall target="sf-cache-clear" />
         <echo msg="${phpunit.bin}" />
         <phingcall target="test-by-group">
@@ -182,7 +182,7 @@
     <!-- Target: test-dev                              -->
     <!-- Desc: used for local testing                  -->
     <!-- ============================================  -->
-    <target name="test-dev" depends="doctrine-reset, fixture-loading">
+    <target name="test-dev" depends="doctrine-reset">
         <delete quiet="true">
             <fileset dir="var/logs/">
                 <include name="test.*" />
