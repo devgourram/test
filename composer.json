@@ -34,8 +34,7 @@
         "endouble/symfony3-custom-coding-standard": "~2.1",
         "phploc/phploc": "~4.0",
         "sebastian/phpcpd": "^2.0",
-        "sensio/generator-bundle": "^3.0",
-        "endouble/symfony3-custom-coding-standard": "~2.1"
+        "sensio/generator-bundle": "^3.0"
     },
     "scripts": {
         "symfony-scripts": [

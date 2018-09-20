@@ -36,7 +36,7 @@ fi
 # php bin/console iad:geocode:migrate 1000 --env=test
 echo "Lancement des tests phpunit"
 php bin/console cache:clear --env=test
-bin/phpunit -c app/
+phpunit -c app/
 if [ "$?" != "0" ]; then
     exit 1;
 fi
