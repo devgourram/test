@@ -46,7 +46,7 @@ if [ "$?" != "0" ]; then
     exit 1;
 fi
 echo "PHPCS Symfony3"
-/var/lib/jenkins/vendor/bin/phpcs  /var/lib/jenkins/jobs/IadEspanaApp/workspace/src -n --colors --ignore=Tests --error-severity=1 --standard=vendor/Symfony3-custom-coding-standard/Symfony3Custom
+phpcs  /var/lib/jenkins/jobs/IadEspanaApp/workspace/src -n --colors --ignore=Tests --error-severity=1 --standard=vendor/Symfony3-custom-coding-standard/Symfony3Custom
 if [ "$?" != "0" ]; then
     exit 1;
 fi
