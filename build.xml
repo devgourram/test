@@ -205,17 +205,4 @@
     <target name="build" depends="test, validations">
     </target>
 
-    <!-- ============================================ -->
-    <!-- Target : test-by-group (Hidden)              -->
-    <!-- Desc :  execute test by group                -->
-    <!-- ============================================ -->
-    <target hidden="true" name="test-by-group">
-        <echo msg="Test ${group}" />
-        <exec command="${phpunit.bin}
-                       -c app/
-                       --group ${group}
-                       ${options}"
-              checkreturn="true"
-              passthru="true"/>
-    </target>
 </project>
